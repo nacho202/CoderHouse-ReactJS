@@ -1,17 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import './ProductDetails.css';
-import { useParams, Link } from 'react-router-dom'; // Importa Link
+import { useParams, Link } from 'react-router-dom';
+import { CartContext } from '../carrito/CartContext'; // Importa el contexto del carrito
 import { products } from '../ProductsMock';
 
 const ProductDetails = () => {
-  const { id } = useParams(); // Obtener el ID del producto de los parámetros de la URL
-  const product = products.find(product => product.id === parseInt(id)); // Filtrar productos por ID
-
-  const [quantity, setQuantity] = useState(1); // Estado para la cantidad seleccionada
+  const { id } = useParams();
+  const { addToCart } = useContext(CartContext); // Obtiene la función addToCart del contexto del carrito
+  const product = products.find(product => product.id === parseInt(id));
+  const [quantity, setQuantity] = useState(1);
 
   const handleQuantityChange = (e) => {
     const value = parseInt(e.target.value);
     setQuantity(value);
+  };
+
+  const handleAddToCart = () => {
+    const selectedProduct = {
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      quantity: quantity
+    };
+    addToCart(selectedProduct);
   };
 
   return (
@@ -52,8 +63,7 @@ const ProductDetails = () => {
               <div className="stock-option">
                 <p>Stock Disponible: {product.stock}</p>
               </div>
-              {/* Utiliza Link para dirigirte a la página de /cart */}
-              <Link to="/cart" className="add-to-cart-btn">Agregar al Carrito</Link>
+              <Link to="/cart" className="add-to-cart-btn" onClick={handleAddToCart}>Agregar al Carrito</Link>
             </div>
           </div>
           <div className="product-description">
@@ -64,6 +74,7 @@ const ProductDetails = () => {
       ) : (
         <div className="error-message">Producto no encontrado</div>
       )}
+      
     </div>
   );
 };

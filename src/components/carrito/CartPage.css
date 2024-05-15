@@ -85,6 +85,8 @@
     font-size: 18px;
     border-radius: 5px;
     cursor: pointer;
+
+    text-decoration: none;
   }
   
   .checkout-btn:hover {
@@ -116,4 +118,37 @@
   .payment-icons img {
     margin: 0 50px;
   }
-  
+  .remove-btn {
+  padding: 8px 8px;
+  font-size: 15px;
+  background-color: #eb1708;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+
+.remove-btn {
+  margin-left: 20px; 
+}
+
+/* Estilos para el botón "Limpiar Carrito" */
+.clear-cart-btn {
+  padding: 10px 10px;
+  font-size: 17px;
+  background-color: #eb1708;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  margin-top: 30px;
+}
+
+/* Estilos para el contenedor de los métodos de pago */
+.payment-methods {
+  margin-top: 20px; /* Reduzco el margen superior para que se vea más cerca del botón "Limpiar Carrito" */
+}
+.cart-item{
+  margin-bottom: 30px;
+}

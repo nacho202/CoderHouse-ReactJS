@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Navbar, Nav } from "react-bootstrap";
 import "./Navbar.css";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import Badge from "@mui/material/Badge";
+import { CartContext } from '../carrito/CartContext';
+
+
 
 const NavBar = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -14,6 +17,10 @@ const NavBar = () => {
   const handleMouseOut = () => {
     setShowDropdown(false);
   };
+  
+
+  const { getTotalItems } = useContext(CartContext);
+  let total = getTotalItems()
 
   return (
     <Navbar bg="light" expand="lg">
@@ -64,7 +71,7 @@ const NavBar = () => {
         </Nav>
         <div className="cart-container">
           <a href="/cart">
-            <Badge badgeContent={1} color="secondary">
+            <Badge badgeContent={total} color="secondary">
               <AddShoppingCartIcon color="secondary" fontSize="medium" />
             </Badge>
           </a>

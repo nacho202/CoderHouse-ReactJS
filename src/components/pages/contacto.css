@@ -52,6 +52,8 @@ body {
     border-radius: 5px;
     font-size: 16px;
     cursor: pointer;
+    text-align: center;
+    text-decoration: none;
   }
   
   .enviar-btn:hover {

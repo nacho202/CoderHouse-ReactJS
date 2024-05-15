@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'; // Importa Link de React Router
 import './contacto.css';
 
 const Contacto = () => {
@@ -18,7 +19,8 @@ const Contacto = () => {
           <label htmlFor="pregunta">Pregunta:</label>
           <textarea id="pregunta" name="pregunta" rows="4" required></textarea>
         </div>
-        <button type="submit" className="enviar-btn">Enviar</button>
+        {/* Cambiar el botón por un Link */}
+        <Link to="/contactado" className="enviar-btn">Enviar</Link>
       </form>
     </div>
   );
