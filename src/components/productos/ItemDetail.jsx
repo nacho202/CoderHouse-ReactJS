@@ -1,14 +1,34 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './ProductDetails.css';
 import { useParams, Link } from 'react-router-dom';
 import { CartContext } from '../carrito/CartContext'; // Importa el contexto del carrito
-import { products } from '../ProductsMock';
+import { db } from '../../firebaseConfig'; // Asegúrate de tener esta importación
+import { doc, getDoc } from 'firebase/firestore';
 
 const ProductDetails = () => {
   const { id } = useParams();
   const { addToCart } = useContext(CartContext); // Obtiene la función addToCart del contexto del carrito
-  const product = products.find(product => product.id === parseInt(id));
+  const [product, setProduct] = useState(null);
   const [quantity, setQuantity] = useState(1);
+
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        const docRef = doc(db, 'products', id);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+          setProduct({ id: docSnap.id, ...docSnap.data() });
+        } else {
+          console.log('No such document!');
+        }
+      } catch (error) {
+        console.error("Error fetching product: ", error);
+      }
+    };
+
+    fetchProduct();
+  }, [id]);
 
   const handleQuantityChange = (e) => {
     const value = parseInt(e.target.value);
@@ -16,13 +36,15 @@ const ProductDetails = () => {
   };
 
   const handleAddToCart = () => {
-    const selectedProduct = {
-      id: product.id,
-      title: product.title,
-      price: product.price,
-      quantity: quantity
-    };
-    addToCart(selectedProduct);
+    if (product) {
+      const selectedProduct = {
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        quantity: quantity
+      };
+      addToCart(selectedProduct);
+    }
   };
 
   return (
@@ -74,7 +96,6 @@ const ProductDetails = () => {
       ) : (
         <div className="error-message">Producto no encontrado</div>
       )}
-      
     </div>
   );
 };

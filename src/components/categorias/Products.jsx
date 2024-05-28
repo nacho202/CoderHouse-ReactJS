@@ -1,9 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import './Product.css';
-import { products } from '../ProductsMock';
+import { db } from '../../firebaseConfig';
+import { collection, getDocs } from 'firebase/firestore';
 
 const Products = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'products'));
+        const productsArray = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+        setProducts(productsArray);
+      } catch (error) {
+        console.error("Error fetching products: ", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
   // Obtener la categoría de la URL
   const { pathname } = useLocation();
   let categoria = pathname.split('/').pop();
@@ -42,6 +65,10 @@ const Products = () => {
   // Filtrar los productos según la categoría
   const filteredProducts = categoria === 'products' ? products : products.filter(product => product.category.includes(categoria));
 
+  if (loading) {
+    return <p>Cargando productos...</p>;
+  }
+
   return (
     <div>
       <h2>{tituloCategoria}</h2>
@@ -61,4 +88,3 @@ const Products = () => {
 };
 
 export default Products;
-
